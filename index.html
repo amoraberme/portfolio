@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JERICO BERME - AI SPECIALIST</title>
+    <style>
+        :root {
+            --color-void: #050505;
+            --color-stark: #FFFFFF;
+            --color-volt: #FFFFFF;
+
+            --font-headline: 'Oswald', 'Impact', sans-serif;
+            --font-data: 'Courier New', monospace;
+
+            --spacing-unit: 20px;
+        }
+
+        /* RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: crosshair !important;
+            /* GLOBAL CROSSHAIR RULES */
+        }
+
+        body {
+            background-color: var(--color-void);
+            color: var(--color-stark);
+            font-family: var(--font-data);
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 
+        ------------------------------------------------------------------
+        // TYPOGRAPHY
+        ------------------------------------------------------------------
+        */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .headline {
+            font-family: var(--font-headline);
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: var(--spacing-unit);
+            font-weight: 700;
+        }
+
+        .mega-title {
+            font-size: clamp(60px, 15vw, 200px);
+            word-break: break-all;
+            letter-spacing: -2px;
+        }
+
+        .section-header {
+            font-size: clamp(30px, 5vw, 60px);
+            border-bottom: 2px solid var(--color-stark);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .data-label {
+            font-size: 12px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 
+        ------------------------------------------------------------------
+        // LAYOUT ARCHITECTURE
+        ------------------------------------------------------------------
+        */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+        }
+
+        /* VERTICAL FEED */
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            /* Reduced from 100px then 60px */
+            padding-top: 40px;
+            /* Reduced from 100px then 60px */
+            padding-bottom: 40px;
+            /* Reduced from 100px then 60px */
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border-bottom: 1px solid #333;
+            padding-bottom: var(--spacing-unit);
+        }
+
+        /* MARQUEE BANNER - INFINITE SCROLL */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            border-top: 2px solid var(--color-stark);
+            border-bottom: 2px solid var(--color-stark);
+            background: var(--color-void);
+            padding: 20px 0;
+            white-space: nowrap;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scroll-left 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: var(--font-headline);
+            font-size: 80px;
+            /* margin-right: 50px; Removed to fix spacing */
+            margin-right: 0;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--color-stark);
+            transition: all 0.3s ease;
+        }
+
+        .marquee-container:hover .marquee-item {
+            color: var(--color-volt);
+            -webkit-text-stroke: 1px var(--color-volt);
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* BENTO GRID / MASONRY - TECH TAB UPDATE */
+        .grid-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-item {
+            position: relative;
+            background: #111;
+            /* Main Border needs to be masked, so we might need a different approach or just accept the patch covers it */
+            border: 1px solid #333;
+            border-radius: 20px 20px 0 20px;
+            /* TL, TR, BL, BR-Square? No, BR is where the cut is. */
+            /* We leave BR square-ish because the patch will sit there. 
+               Actually, if we radius the other 3, BR remains 0 (sharp).
+            */
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            overflow: visible;
+            /* Must be visible for the tab patch if it extends or z-indexing */
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* THE CUT-OUT PATCH */
+        .grid-item::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 120px;
+            /* Width of the cut-out */
+            height: 40px;
+            /* Height of the cut-out */
+            background: var(--color-void);
+            /* Matches Page BG */
+
+            /* The Border logic to close the shape */
+            border-top: 1px solid #333;
+            border-left: 1px solid #333;
+            border-bottom: 1px solid transparent;
+            /* Hide bottom border of patch */
+            border-right: 1px solid transparent;
+            /* Hide right border of patch */
+
+            border-radius: 20px 0 0 0;
+            /* Curve the inner corner */
+            z-index: 10;
+            transition: border-color 0.3s ease;
+            pointer-events: none;
+            /* Let clicks pass through if needed, though labels are on top */
+        }
+
+        .grid-item.tall {
+            aspect-ratio: 1 / 2;
+            grid-row: span 2;
+        }
+
+        .grid-item.wide {
+            grid-column: span 2;
+            aspect-ratio: 2 / 1;
+        }
+
+        .grid-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            z-index: 5;
+            position: relative;
+            /* Above the placeholder */
+        }
+
+        /* We need to move the date/category INTO the tab area */
+        .grid-item .meta-tab {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            z-index: 20;
+            /* Above the patch */
+            font-size: 12px;
+            color: var(--color-volt);
+            background: var(--color-volt);
+            color: #000;
+            padding: 2px 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Actually, user wants "framed". Let's put the text inside the black void space */
+        .grid-item .tab-label {
+            position: absolute;
+            bottom: 8px;
+            right: 15px;
+            z-index: 11;
+            /* Above patch */
+            font-size: 11px;
+            color: var(--color-stark);
+            text-align: right;
+        }
+
+        /* Highlight specific labels */
+        .grid-item:hover .tab-label {
+            color: var(--color-volt);
+        }
+
+        /* Placeholder for images */
+        .placeholder-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            transition: transform 0.5s ease;
+            z-index: 1;
+            border-radius: 19px 19px 0 19px;
+            /* Match container minus border width approx */
+            /* We need to clip the image so it doesn't show under the patch */
+            clip-path: polygon(0 0,
+                    100% 0,
+                    100% calc(100% - 40px),
+                    calc(100% - 120px) calc(100% - 40px),
+                    calc(100% - 120px) 100%,
+                    0 100%);
+        }
+
+        /* 
+        ------------------------------------------------------------------
+        // INTERACTION PHYSICS
+        ------------------------------------------------------------------
+        */
+        .grid-item:hover {
+            border-color: var(--color-volt);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            /* Shadow for lift */
+        }
+
+        /* ALSO Highlight the Patch Border */
+        .grid-item:hover::after {
+            border-top-color: var(--color-volt);
+            border-left-color: var(--color-volt);
+        }
+
+        .grid-item:hover .placeholder-img {
+            transform: scale(1.02);
+        }
+
+        .grid-item:hover .item-title {
+            color: var(--color-volt);
+        }
+
+        /* SLIDESHOW ANIMATION */
+        .slideshow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 19px 19px 0 19px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .slide-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Default state: First image visible */
+        .slide-img:nth-child(1) {
+            opacity: 1;
+        }
+
+        /* Hover: Trigger animation */
+        .grid-item:hover .slide-img {
+            animation: cycle-3 3s infinite;
+        }
+
+        /* Staggered animation delays handled by keyframes logic directly or delays */
+        /* Actually, simpler to just animate opacity based on keyframes for each child */
+
+        .grid-item:hover .slide-img:nth-child(1) {
+            animation-name: cycle-1;
+        }
+
+        .grid-item:hover .slide-img:nth-child(2) {
+            animation-name: cycle-2;
+        }
+
+        .grid-item:hover .slide-img:nth-child(3) {
+            animation-name: cycle-3;
+        }
+
+        @keyframes cycle-1 {
+
+            0%,
+            33% {
+                opacity: 1;
+            }
+
+            33.1%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes cycle-2 {
+
+            0%,
+            33% {
+                opacity: 0;
+            }
+
+            33.1%,
+            66% {
+                opacity: 1;
+            }
+
+            66.1%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes cycle-3 {
+
+            0%,
+            66% {
+                opacity: 0;
+            }
+
+            66.1%,
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Dark Text Override for Light Images */
+        .text-dark .item-title,
+        .text-dark .data-label,
+        .text-dark .meta-tag,
+        .text-dark .tab-label {
+            color: #000000 !important;
+        }
+
+        /* CARD MEDIA QUERIES */
+        #hero-sequence {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Background Layer */
+
+            pointer-events: none;
+
+            /* Feathering / Masking */
+            /* Restored to blend edges into the void */
+            mask-image: radial-gradient(circle at 60% 50%, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at 60% 50%, black 40%, transparent 100%);
+
+            opacity: 0.8;
+            /* Slight transparency for text contrast */
+        }
+
+        /* VIDEO PREVIEW (For Kinetic Cards) */
+        .video-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 19px 19px 0 19px;
+            /* Match container minus border */
+            clip-path: polygon(0 0,
+                    100% 0,
+                    100% calc(100% - 40px),
+                    calc(100% - 120px) calc(100% - 40px),
+                    calc(100% - 120px) 100%,
+                    0 100%);
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .anim-gif {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            /* Above static */
+        }
+
+        .grid-item:hover .anim-gif {
+            opacity: 1;
+        }
+
+        /* Ensure the images scale like the placeholders did */
+        .grid-item:hover .video-preview {
+            transform: scale(1.02);
+        }
+
+        /* KINETIC TAB (Grid Link) */
+        .kinetic-tab {
+            position: absolute;
+            bottom: 8px;
+            right: 15px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            height: 13px;
+            /* Matches font-size roughly */
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--color-stark);
+            text-align: right;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .kinetic-tab span {
+            display: block;
+            line-height: 13px;
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .kinetic-tab:hover span {
+            transform: translateY(-100%);
+        }
+
+        .kinetic-tab span:nth-child(2) {
+            color: var(--color-volt);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--color-stark);
+            color: var(--color-stark);
+            padding: 15px 40px;
+            font-family: var(--font-data);
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--color-volt);
+            color: var(--color-void);
+            border-color: var(--color-volt);
+            box-shadow: 0 0 15px var(--color-volt);
+        }
+
+        /* UTILS */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* KINETIC LINK (ROLLING TEXT) */
+        .kinetic-link {
+            display: inline-flex;
+            flex-direction: column;
+            height: 20px;
+            /* Adjust to match font-size line-height approx */
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            vertical-align: bottom;
+            border-bottom: 1px solid #333;
+        }
+
+        .kinetic-link span {
+            display: block;
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            line-height: 20px;
+            /* Match container height */
+        }
+
+        .kinetic-link:hover span {
+            transform: translateY(-100%);
+        }
+
+        .kinetic-link:hover {
+            border-color: var(--color-volt);
+        }
+
+        .meta-tag {
+            border: 1px solid #333;
+            padding: 5px 10px;
+            font-size: 10px;
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 768px) {
+            .mega-title {
+                font-size: 15vw;
+            }
+
+            /* Stack Grid Items */
+            .grid-section {
+                grid-template-columns: 1fr;
+                /* Force Single Column */
+            }
+
+            .grid-item.wide,
+            .grid-item.tall {
+                grid-column: span 1;
+                grid-row: span 1;
+                aspect-ratio: 1/1;
+                /* Normalize aspect ratio */
+            }
+
+            /* Fix Grid Item 04 (Motivational Video) overrides for mobile */
+            .grid-item[style*="grid-column: span 2"] {
+                grid-column: span 1 !important;
+                width: 100% !important;
+                justify-self: stretch !important;
+            }
+
+            /* Stack Profile Section */
+            .section-header+div {
+                display: flex !important;
+                flex-direction: column;
+                gap: 40px !important;
+            }
+
+            .section-header+div>div {
+                width: 100%;
+            }
+
+            /* Stack Footer */
+            footer .flex-between {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            footer .flex-between>div {
+                width: 100%;
+                text-align: left !important;
+            }
+        }
+    </style>
+    <!-- Import Fonts via Google Fonts for "Oswald" to simulate impact-style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- HEADER REMOVED by user request -->
+
+        <main style="padding-top: 0;">
+            <div class="scroll-track" style="height: 300vh; position: relative;">
+                <div class="sticky-hero"
+                    style="position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden;">
+                    <!-- CANVAS BACKGROUND -->
+                    <canvas id="hero-sequence"></canvas>
+
+                    <!-- HERO CONTENT (Overlay) -->
+                    <!-- HERO CONTENT (Overlay) -->
+                    <!-- Removed z-index from parent .hero to allow interleaving children with canvas -->
+                    <section class="hero"
+                        style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; pointer-events: none;">
+                        <div class="data-label" style="pointer-events: auto; position: relative; z-index: 20;">SET TO
+                            14.4085° N, 121.0464° E</div>
+                        <h1 class="mega-title"
+                            style="pointer-events: auto; position: relative; z-index: 10; color: var(--color-stark);">
+                            AI-<br>
+                            SPECIALIST
+                        </h1>
+                        <div class="flex-between"
+                            style="margin-top: 20px; pointer-events: auto; position: relative; z-index: 20;">
+                            <p style="max-width: 400px;">
+                                // STATUS: ACTIVE<br>
+                                Forward-thinking Digital Operations Technologist and Gemini Certified Educator
+                                leveraging Generative AI and Google Workspace ecosystems to engineer high-efficiency
+                                workflows and drive scalable digital transformation.
+                            </p>
+                            <a href="#" class="btn">Initiate Sequence</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- MARQUEE BANNER -->
+        </main>
+    </div>
+
+    <!-- FULL WIDTH MARQUEE -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="marquee-item">SPEED /// PRECISION /// VELOCITY /// MOMENTUM /// FORCE ///&nbsp;</span>
+            <span class="marquee-item">SPEED /// PRECISION /// VELOCITY /// MOMENTUM /// FORCE ///&nbsp;</span>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+        <!-- BENTO GRID -->
+        <section>
+            <div class="section-header">
+                <h2>SELECTED WORKS</h2>
+                <span class="data-label">01-03</span>
+            </div>
+
+            <div class="grid-section">
+                <!-- ITEM 1 -->
+                <div class="grid-item tall text-dark">
+                    <div class="slideshow-container">
+                        <img src="images/Gemini_Generated_Image_p5yba7p5yba7p5yb.png" class="slide-img" alt="Slide 1">
+                        <img src="images/asd.png" class="slide-img" alt="Slide 2">
+                        <img src="images/adfsgd.png" class="slide-img" alt="Slide 3">
+                    </div>
+
+                    <div class="grid-item-content" style="z-index: 2; position: relative;">
+                        <div class="flex-between">
+                            <span class="meta-tag">01</span>
+                            <!-- Moved Date to Tab Label -->
+                        </div>
+                        <div>
+                            <h3 class="item-title">Affiliated Project</h3>
+                            <p class="data-label">UX / UI / BRANDING</p>
+                        </div>
+                    </div>
+                    <div class="tab-label" style="z-index: 2; position: relative;">2024</div>
+                </div>
+
+                <!-- ITEM 2 -->
+                <div class="grid-item tall">
+                    <!-- Video Preview Stack -->
+                    <img src="images/tiktok-static.jpg" class="video-preview static-thumb" alt="TikTok Preview Static">
+                    <img src="images/titookvid-ezgif.com-video-to-webp-converter.webp" class="video-preview anim-gif"
+                        alt="TikTok Preview Animated">
+
+                    <div class="grid-item-content">
+                        <div class="flex-between">
+                            <span class="meta-tag">02</span>
+                        </div>
+                        <div>
+                            <h3 class="item-title">TIKTOK TRENDS</h3>
+                            <p class="data-label">MOTION DESIGN</p>
+                        </div>
+                    </div>
+                    <a href="https://www.tiktok.com/@amorvisuals" class="kinetic-tab" target="_blank">
+                        <span>TIKTOK</span>
+                        <span>@amorvisuals</span>
+                    </a>
+                </div>
+
+                <!-- ITEM 3 (VALORANT - WIDE) -->
+                <div class="grid-item wide">
+                    <!-- Video Preview Stack -->
+                    <img src="images/valorant-static.jpg" class="video-preview static-thumb" alt="Valorant Static">
+                    <img src="images/FireAgain-ezgif.com-video-to-webp-converter.webp" class="video-preview anim-gif"
+                        alt="Valorant Animated">
+
+                    <div class="grid-item-content">
+                        <div class="flex-between">
+                            <span class="meta-tag">03</span>
+                        </div>
+                        <div>
+                            <h3 class="item-title">VALORANT</h3>
+                            <p class="data-label">YouTube Content</p>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com/@amorvisual" class="kinetic-tab" target="_blank">
+                        <span>YouTube</span>
+                        <span>@amorvisual</span>
+                    </a>
+                </div>
+
+                <!-- ITEM 4 (TUSOAD - STANDARD 430x322) -->
+                <div class="grid-item"
+                    style="aspect-ratio: 430/322; grid-column: span 2; justify-self: center; width: calc(50% - 10px);">
+                    <!-- Video Preview Stack -->
+                    <img src="images/tusoad-static.jpg" class="video-preview static-thumb" alt="TUSOAD Static">
+                    <img src="images/TUSOAD-ezgif.com-video-to-webp-converter.webp" class="video-preview anim-gif"
+                        alt="TUSOAD Animated">
+
+                    <div class="grid-item-content">
+                        <div class="flex-between">
+                            <span class="meta-tag">04</span>
+                        </div>
+                        <div>
+                            <h3 class="item-title">Motivational Video</h3>
+                            <p class="data-label">YouTube Content</p>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com/@innershift11" class="kinetic-tab" target="_blank">
+                        <span>YouTube</span>
+                        <span>@innershift1</span>
+                    </a>
+                </div>
+            </div>
+
+
+        </section>
+
+        <!-- NEW ABOUT SECTION -->
+        <section style="margin-top: 60px; scroll-margin-top: 60px;">
+            <div class="section-header">
+                <h2>PROFILE</h2>
+                <span class="data-label">BIO_DATA</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(300px, 1fr) 1.5fr; gap: 60px; align-items: start;">
+                <!-- Left Column: Image & Identity -->
+                <div>
+                    <div
+                        style="aspect-ratio: 1/1; background-color: #111; border: 1px solid #333; position: relative; margin-bottom: 30px; overflow: hidden;">
+                        <img src="images/profile.jpg" alt="Jerico Berme Profile"
+                            style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                    <h2 style="font-size: 40px; margin-bottom: 5px; line-height: 1.1;">JERICO BERME</h2>
+                    <p style="font-family: var(--font-data); color: #888; font-size: 16px;">EDITOR</p>
+                </div>
+
+                <!-- Right Column: Biography -->
+                <div style="font-family: var(--font-data); font-size: 16px; line-height: 1.8; color: #ccc;">
+                    <p style="margin-bottom: 30px; font-weight: bold; color: white;">My professional story is one of
+                        evolution—from a creative problem solver to a data guardian, and finally, to an AI-driven
+                        technologist.</p>
+
+                    <p style="margin-bottom: 30px;">It began with a foundation in creativity and efficiency. As a
+                        Freelance Digital Imaging Specialist, I spent years directing creative projects and mastering
+                        tools like Adobe Photoshop and Lightroom. Even then, I was obsessed with workflow optimization,
+                        successfully accelerating project turnaround times by 20% through the editing workflows I
+                        engineered.</p>
+
+
+
+                    <p style="margin-bottom: 30px;">However, I realized that maintaining high standards required more
+                        than just hard work; it required smarter tools. This realization marked my transition into my
+                        current role as a Digital Operations & EdTech Technologist.</p>
+
+                    <p style="color: var(--color-volt);">I fully embraced the AI revolution to enhance how work gets
+                        done. By January 2026, I became a Gemini Certified Educator and a Google Certified Educator
+                        (Level 2), solidifying my expertise in AI implementation. Today, my mission now is to combine my
+                        background in digital governance with advanced AI to drive genuine process efficiency and
+                        digital transformation.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="border-top: 1px solid #333; padding: 50px 0; background: #0a0a0a;">
+        <div class="container">
+            <div class="flex-between" style="align-items: flex-start;">
+                <div>
+                    <div class="headline" style="font-size: 30px;">CONTACT</div>
+                    <p>jericoberme29@gmail.com</p>
+                    <p>+63 998 246 0386</p>
+                </div>
+                <div style="text-align: right;">
+                    <div class="headline" style="font-size: 30px;">SOCIAL</div>
+                    <a href="https://www.instagram.com/amoraberme" class="kinetic-link">
+                        <span>INSTAGRAM</span>
+                        <span style="color: var(--color-volt);">@AMORABERME</span>
+                    </a>
+                </div>
+            </div>
+            <div
+                style="margin-top: 100px; padding-top: 20px; border-top: 1px solid #222; display: flex; justify-content: space-between; opacity: 0.5;">
+                <span class="data-label">© 2026</span>
+                <span class="data-label">ALL SYSTEMS NORMAL</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/scroll-sequence.js"></script>
+</body>
+
+</html>

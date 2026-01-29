@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Sequence Animation</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* A simple loader style directly in HTML to ensure it appears immediately */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+            font-family: sans-serif;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">Loading Sequence... 0%</div>
+
+    <section class="scroll-sequence-container">
+        <canvas id="hero-lightpass"></canvas>
+    </section>
+
+    <section class="content">
+        <h1>Seamless Scroll</h1>
+        <p>Keep scrolling to explore</p>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

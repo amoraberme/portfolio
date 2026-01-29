@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JERICO /// AI-FIRST HYBRID SPECIALIST</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --void-black: #050505;
+            --volt-lime: #CCFF00;
+            --stark-white: #F0F0F0;
+            --font-display: 'Anton', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--void-black);
+            color: var(--stark-white);
+            font-family: var(--font-mono);
+            overflow-x: hidden;
+            width: 100vw;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- MARQUEE --- */
+        .marquee-wrapper {
+            width: 100%;
+            background-color: var(--volt-lime);
+            color: var(--void-black);
+            padding: 0.5rem 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 100;
+            border-bottom: 1px solid var(--stark-white);
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: infiniteScroll 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            padding-right: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes infiniteScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            border-bottom: 1px solid rgba(240, 240, 240, 0.1);
+        }
+
+        .hero-main {
+            display: flex;
+            flex-direction: column;
+            line-height: 0.85;
+            margin-bottom: 2rem;
+            z-index: 2;
+        }
+
+        .hero-line {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 16vw, 20rem);
+            color: var(--stark-white);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .hero-line:hover {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--volt-lime);
+        }
+
+        .hero-sub {
+            font-family: var(--font-mono);
+            color: var(--volt-lime);
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+            max-width: 40ch;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-left: 2px solid var(--volt-lime);
+            padding-left: 1rem;
+        }
+
+        /* --- GRID SYSTEM --- */
+        .grid-section {
+            padding: 4rem 2rem;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+        }
+
+        /* --- CARDS & ANTI-GRAVITY --- */
+        .card {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            min-height: 400px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Anti-Gravity Float Animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .card:nth-child(1) {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .card:nth-child(2) {
+            animation: float 7s ease-in-out infinite;
+            animation-delay: 1.5s;
+        }
+
+        .card:nth-child(3) {
+            animation: float 5.5s ease-in-out infinite;
+            animation-delay: 0.5s;
+            background-color: #080808;
+        }
+
+        /* Hover Interaction */
+        .card:hover {
+            transform: translateY(-25px) scale(1.02);
+            border-color: var(--volt-lime);
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.15);
+            z-index: 10;
+        }
+
+        .card-number {
+            font-size: 0.8rem;
+            color: #333;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            color: var(--stark-white);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: auto;
+        }
+
+        .visual-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--volt-lime);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 10px var(--volt-lime);
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid #1a1a1a;
+            padding: 4rem 0;
+        }
+
+        .signature {
+            font-family: var(--font-display);
+            font-size: clamp(5rem, 25vw, 30rem);
+            color: #0f0f0f;
+            transform: rotate(-5deg);
+            white-space: nowrap;
+            transition: color 0.5s ease;
+            user-select: none;
+        }
+
+        .signature:hover {
+            color: #141414;
+        }
+
+        .footer-meta {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            text-align: right;
+            font-size: 0.8rem;
+            color: #444;
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, transparent, rgba(204, 255, 0, 0.02), transparent);
+            pointer-events: none;
+            z-index: 999;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scan-line"></div>
+
+    <nav style="padding: 1.5rem 2rem; display: flex; justify-content: space-between; border-bottom: 1px solid #1a1a1a;">
+        <span style="color: var(--volt-lime);">/// JERICO.SYS</span>
+        <span>EST. 2026</span>
+    </nav>
+
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            <span class="marquee-item">EFFICIENCY MULTIPLIED /// AI OPERATIONS /// CREATIVE TECH /// OPTIMIZATION LOOPS
+                /// NEURAL NETWORKS /// GENERATIVE DESIGN /// </span>
+            <span class="marquee-item">EFFICIENCY MULTIPLIED /// AI OPERATIONS /// CREATIVE TECH /// OPTIMIZATION LOOPS
+                /// NEURAL NETWORKS /// GENERATIVE DESIGN /// </span>
+        </div>
+    </div>
+
+    <header class="hero">
+        <div class="hero-main">
+            <div class="hero-line">AI-FIRST</div>
+            <div class="hero-line"
+                style="text-align: right; color: transparent; -webkit-text-stroke: 2px var(--stark-white);">SPECIALIST
+            </div>
+        </div>
+        <div class="hero-sub">
+            Optimization meets Generative Design<br>
+            <span style="color: #444;">[ SYSTEM READY ]</span>
+        </div>
+    </header>
+
+    <section class="grid-section">
+        <div class="bento-grid">
+            <!-- Visual Design -->
+            <article class="card">
+                <div class="card-number">
+                    <span>01</span>
+                    <span>[VISUAL]</span>
+                </div>
+                <div>
+                    <!-- Decorative shape -->
+                    <div style="width: 100%; height: 2px; background: #222; margin-bottom: 2rem;"></div>
+                    <h2 class="card-title">VISUAL<br>DESIGN</h2>
+                </div>
+                <p class="card-desc">High-fidelity interface construction using generative parameters and brutalist
+                    layout engines.</p>
+            </article>
+
+            <!-- Operations -->
+            <article class="card">
+                <div class="card-number">
+                    <span>02</span>
+                    <span>[OPS]</span>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1;">
+                    <div
+                        style="border: 1px dashed var(--volt-lime); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <span class="visual-indicator" style="margin:0;"></span>
+                    </div>
+                </div>
+                <h2 class="card-title" style="font-size: 2rem;">OPERATIONS</h2>
+                <p class="card-desc">Streamlining workflows through automated agents and neural feedback loops.</p>
+            </article>
+
+            <!-- Video -->
+            <article class="card">
+                <div class="card-number">
+                    <span>03</span>
+                    <span>[MOTION]</span>
+                </div>
+                <h2 class="card-title">KINETIC<br>VIDEO</h2>
+                <div style="margin-top: 2rem; border: 1px solid #333; padding: 1rem;">
+                    <span style="font-size: 4rem; line-height: 1; color: var(--volt-lime);">▶</span>
+                </div>
+                <p class="card-desc" style="margin-top: 1rem;">Motion graphics and automated video synthesis for rapid
+                    content scaling.</p>
+            </article>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="signature">JERICO</div>
+        <div class="footer-meta">
+            <p>LOCATION: CLOUD</p>
+            <p>STATUS: ONLINE</p>
+            <p>&copy; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Console Signature
+        console.log(
+            "%c JERICO /// AI-FIRST SPECIALIST ", 
+            "background: #050505; color: #CCFF00; font-size: 12px; padding: 10px; border: 1px solid #CCFF00;"
+        );
+
+        // Optional: Pause animations on click for accessibility
+        document.addEventListener('keydown', (e) => {
+            if(e.code === 'Space') {
+              nt.body.style.setProperty('--font-mono', 'Arial'); // Just a glitch test
+            }
+        });
+    </script>
+</body>
+
+</html>
